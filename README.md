@@ -4,7 +4,7 @@ A modern Three.js hello world application built with **TypeScript** and **Webpac
 
 ## 🚀 Live Demo
 
-Visit the live demo: [https://yourusername.github.io/threejs-hello-world-pages](https://yourusername.github.io/threejs-hello-world-pages)
+Visit the live demo: [https://THasthika.github.io/threejs-hello-world](https://THasthika.github.io/threejs-hello-world)
 
 ## ✨ Features
 
@@ -31,7 +31,7 @@ Visit the live demo: [https://yourusername.github.io/threejs-hello-world-pages](
 ## 📁 Project Structure
 
 ```
-threejs-hello-world-pages/
+threejs-hello-world/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml          # GitHub Actions workflow
@@ -57,7 +57,7 @@ threejs-hello-world-pages/
    - Navigate to "Pages" section
    - Set Source to "GitHub Actions"
 3. **Update repository URLs**:
-   - Edit `package.json` and replace `yourusername` with your GitHub username
+   - Edit `package.json` and replace `THasthika` with your GitHub username
    - Update the `publicPath` in `webpack.config.js`
 4. **Push changes** - GitHub Actions will automatically build and deploy your site
 
@@ -65,8 +65,8 @@ threejs-hello-world-pages/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/threejs-hello-world-pages.git
-   cd threejs-hello-world-pages
+   git clone https://github.com/THasthika/threejs-hello-world.git
+   cd threejs-hello-world
    ```
 
 2. **Install dependencies**:
@@ -190,7 +190,7 @@ npm run clean
 1. **Clone and install**:
    ```bash
    git clone <your-repo-url>
-   cd threejs-hello-world-pages
+   cd threejs-hello-world
    npm install
    ```
 
@@ -276,9 +276,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/threejs-hello-world-pages/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/THasthika/threejs-hello-world/issues)
 - 📚 **Three.js Docs**: [threejs.org](https://threejs.org/docs/)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/threejs-hello-world-pages/discussions)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/THasthika/threejs-hello-world/discussions)
 
 ## 🙏 Acknowledgments
 
