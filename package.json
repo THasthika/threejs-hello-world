@@ -1,0 +1,54 @@
+{
+  "name": "threejs-hello-world",
+  "version": "1.0.0",
+  "description": "A simple Three.js hello world application with TypeScript and Webpack, deployed on GitHub Pages",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "start": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/THasthika/threejs-hello-world.git"
+  },
+  "keywords": [
+    "threejs",
+    "3d",
+    "webgl",
+    "github-pages",
+    "hello-world"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/threejs-hello-world/issues"
+  },
+  "homepage": "https://yourusername.github.io/threejs-hello-world",
+  "devDependencies": {
+    "@types/three": "^0.180.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "css-loader": "^6.8.1",
+    "eslint": "^9.36.0",
+    "gh-pages": "^6.3.0",
+    "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  }
+}

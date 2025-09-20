@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="description" content="A simple Three.js hello world application with TypeScript and Webpack">
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div id="controls">
+        <h1>Three.js Hello World</h1>
+        <p>Built with TypeScript & Webpack</p>
+        
+        <div class="control-group">
+            <button id="colorBtn" class="btn">Change Color</button>
+            <button id="wireframeBtn" class="btn">Toggle Wireframe</button>
+        </div>
+        
+        <div class="control-group">
+            <label for="speedRange">Rotation Speed:</label>
+            <input type="range" id="speedRange" min="0" max="0.05" step="0.005" value="0.01">
+        </div>
+        
+        <div class="info">
+            <h3>Controls:</h3>
+            <ul>
+                <li><strong>Change Color:</strong> Randomly changes the cube color</li>
+                <li><strong>Toggle Wireframe:</strong> Switches between solid and wireframe view</li>
+                <li><strong>Rotation Speed:</strong> Adjusts how fast the cube rotates</li>
+            </ul>
+        </div>
+        
+        <div class="links">
+            <a href="https://github.com/yourusername/threejs-hello-world-pages" target="_blank" rel="noopener">
+                📖 View Source Code
+            </a>
+            <a href="https://threejs.org/" target="_blank" rel="noopener">
+                🌐 Learn More About Three.js
+            </a>
+        </div>
+    </div>
+</body>
+</html>
