@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, 'dist'),
       filename: isProduction ? '[name].[contenthash].js' : '[name].js',
       clean: true,
-      publicPath: isProduction ? '/threejs-hello-world-pages/' : '/',
+      publicPath: isProduction ? '/threejs-hello-world/' : '/',
     },
     resolve: {
       extensions: ['.ts', '.js'],
