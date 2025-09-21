@@ -1,10 +1,12 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import './styles.css';
 
 interface ThreeJSHelloWorldOptions {
   backgroundColor?: number;
   cubeColor?: number;
   rotationSpeed?: number;
+  enableOrbitControls?: boolean;
 }
 
 class ThreeJSHelloWorld {
@@ -12,6 +14,7 @@ class ThreeJSHelloWorld {
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshLambertMaterial>;
+  private controls: OrbitControls;
   private animationId: number | null = null;
   private rotationSpeed: number = 0.01;
   private container: HTMLElement;
@@ -28,6 +31,9 @@ class ThreeJSHelloWorld {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshLambertMaterial({ color: options.cubeColor ?? 0x00ff00 });
     this.cube = new THREE.Mesh(geometry, material);
+    
+    // Initialize orbit controls
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     
     // Set initial options
     this.rotationSpeed = options.rotationSpeed ?? 0.01;
@@ -48,6 +54,9 @@ class ThreeJSHelloWorld {
     // Add renderer to container
     this.container.appendChild(this.renderer.domElement);
 
+    // Configure orbit controls
+    this.setupOrbitControls(options.enableOrbitControls ?? true);
+
     // Add cube to scene
     this.scene.add(this.cube);
 
@@ -60,8 +69,33 @@ class ThreeJSHelloWorld {
     this.scene.add(directionalLight);
   }
 
+  private setupOrbitControls(enabled: boolean): void {
+    if (enabled) {
+      // Configure orbit controls
+      this.controls.enableDamping = true; // Smooth camera movement
+      this.controls.dampingFactor = 0.05;
+      this.controls.enableZoom = true;
+      this.controls.enableRotate = true;
+      this.controls.enablePan = true;
+      
+      // Set limits
+      this.controls.maxDistance = 20;
+      this.controls.minDistance = 2;
+      this.controls.maxPolarAngle = Math.PI; // Allow full rotation
+      
+      // Auto rotate settings (will be controlled by rotation speed)
+      this.controls.autoRotate = false;
+      this.controls.autoRotateSpeed = 2.0;
+    } else {
+      this.controls.enabled = false;
+    }
+  }
+
   private animate(): void {
     this.animationId = requestAnimationFrame(() => this.animate());
+
+    // Update controls for smooth camera movement
+    this.controls.update();
 
     // Rotate the cube
     this.cube.rotation.x += this.rotationSpeed;
@@ -87,6 +121,18 @@ class ThreeJSHelloWorld {
       wireframeBtn.addEventListener('click', this.toggleWireframe.bind(this));
     }
     
+    // Handle auto rotate toggle
+    const autoRotateBtn = document.getElementById('autoRotateBtn');
+    if (autoRotateBtn) {
+      autoRotateBtn.addEventListener('click', this.toggleAutoRotate.bind(this));
+    }
+    
+    // Handle camera reset
+    const resetCameraBtn = document.getElementById('resetCameraBtn');
+    if (resetCameraBtn) {
+      resetCameraBtn.addEventListener('click', this.resetCameraPosition.bind(this));
+    }
+    
     // Handle speed control
     const speedRange = document.getElementById('speedRange') as HTMLInputElement;
     if (speedRange) {
@@ -101,6 +147,9 @@ class ThreeJSHelloWorld {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Update controls after resize
+    this.controls.update();
   }
 
   private changeColor(): void {
@@ -117,6 +166,26 @@ class ThreeJSHelloWorld {
 
   private setSpeed(speed: number): void {
     this.rotationSpeed = speed;
+    
+    // Also update auto-rotate speed if it's enabled
+    if (this.controls.autoRotate) {
+      this.controls.autoRotateSpeed = speed * 100; // Scale for better visual effect
+    }
+  }
+
+  public toggleAutoRotate(): void {
+    this.controls.autoRotate = !this.controls.autoRotate;
+  }
+
+  public resetCameraPosition(): void {
+    // Reset camera to initial position
+    this.camera.position.set(0, 0, 5);
+    this.camera.lookAt(0, 0, 0);
+    this.controls.reset();
+  }
+
+  public enableControls(enabled: boolean): void {
+    this.controls.enabled = enabled;
   }
 
   public destroy(): void {
@@ -126,6 +195,9 @@ class ThreeJSHelloWorld {
     }
     
     window.removeEventListener('resize', this.onWindowResize.bind(this));
+    
+    // Dispose of controls
+    this.controls.dispose();
     
     // Clean up Three.js resources
     this.cube.geometry.dispose();
@@ -156,7 +228,8 @@ class App {
     this.threeApp = new ThreeJSHelloWorld(container, {
       backgroundColor: 0x222222,
       cubeColor: 0x00ff00,
-      rotationSpeed: 0.01
+      rotationSpeed: 0.01,
+      enableOrbitControls: true
     });
 
     // Handle page unload

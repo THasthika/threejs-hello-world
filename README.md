@@ -11,9 +11,12 @@ Visit the live demo: [https://THasthika.github.io/threejs-hello-world](https://T
 - **TypeScript**: Full type safety and modern JavaScript features
 - **Webpack**: Modern bundling with hot reload and optimization
 - **Interactive 3D Cube**: A rotating cube with realistic lighting
+- **Camera Controls**: Click and drag to orbit, zoom, and pan around the scene
 - **Color Customization**: Click to randomly change the cube color
 - **Wireframe Toggle**: Switch between solid and wireframe rendering
+- **Auto Rotation**: Toggle automatic camera rotation around the cube
 - **Speed Control**: Adjust rotation speed with a slider
+- **Camera Reset**: Return to initial camera position
 - **Responsive Design**: Works on desktop and mobile devices
 - **Automatic Deployment**: Uses GitHub Actions for CI/CD
 - **Code Splitting**: Optimized bundles for production
@@ -95,9 +98,17 @@ threejs-hello-world/
 
 ## 🎮 Controls
 
+### Camera Controls
+- **Mouse Drag**: Click and hold left mouse button to orbit around the cube
+- **Mouse Wheel**: Scroll to zoom in and out
+- **Right Click + Drag**: Pan the camera around the scene
+- **Auto Rotate**: Toggle automatic camera rotation
+- **Reset Camera**: Return camera to initial position and orientation
+
+### Cube Controls
 - **Change Color**: Randomly changes the cube color
 - **Toggle Wireframe**: Switches between solid and wireframe view
-- **Rotation Speed**: Slider to adjust rotation speed (0-0.05)
+- **Rotation Speed**: Slider to adjust cube rotation speed (0-0.05)
 
 ## ⚙️ Configuration
 

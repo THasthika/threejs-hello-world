@@ -9,6 +9,10 @@
 <body>
     <div id="container"></div>
     
+    <div id="camera-instructions" class="camera-instructions">
+        <p>🖱️ Drag to orbit • 🔍 Scroll to zoom • 🖱️ Right-click to pan</p>
+    </div>
+    
     <div id="controls">
         <h1>Three.js Hello World</h1>
         <p>Built with TypeScript & Webpack</p>
@@ -19,15 +23,25 @@
         </div>
         
         <div class="control-group">
+            <button id="autoRotateBtn" class="btn">Toggle Auto Rotate</button>
+            <button id="resetCameraBtn" class="btn">Reset Camera</button>
+        </div>
+        
+        <div class="control-group">
             <label for="speedRange">Rotation Speed:</label>
-            <input type="range" id="speedRange" min="0" max="0.05" step="0.005" value="0.01">
+            <input type="range" id="speedRange" min="0" max="0.5" step="0.005" value="0.01">
         </div>
         
         <div class="info">
             <h3>Controls:</h3>
             <ul>
+                <li><strong>Mouse Drag:</strong> Click and drag to orbit around the cube</li>
+                <li><strong>Mouse Wheel:</strong> Zoom in and out</li>
+                <li><strong>Right Click + Drag:</strong> Pan the camera</li>
                 <li><strong>Change Color:</strong> Randomly changes the cube color</li>
                 <li><strong>Toggle Wireframe:</strong> Switches between solid and wireframe view</li>
+                <li><strong>Auto Rotate:</strong> Toggles automatic camera rotation</li>
+                <li><strong>Reset Camera:</strong> Returns camera to initial position</li>
                 <li><strong>Rotation Speed:</strong> Adjusts how fast the cube rotates</li>
             </ul>
         </div>
