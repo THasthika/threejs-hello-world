@@ -107,7 +107,6 @@ export class InputManager {
   }
 
   private triggerEvent(target: string, eventType: string, event?: Event): void {
-    console.log(`Triggering event: ${target} - ${eventType}`);
     const targetEvents = this.globalEvents.get(target);
     if (targetEvents && targetEvents.has(eventType)) {
       const callbacks = targetEvents.get(eventType)!;
