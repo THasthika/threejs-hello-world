@@ -1,6 +1,6 @@
-# Three.js Hello World - TypeScript & Webpack
+# Three.js Hello World - Modular Framework
 
-A modern Three.js hello world application built with **TypeScript** and **Webpack**, featuring a rotating 3D cube with interactive controls, deployed automatically to GitHub Pages.
+A modern Three.js application built with **TypeScript** and **Webpack**, featuring a **modular framework architecture** for building scalable 3D applications. Includes scene management, component system, and interactive controls.
 
 ## 🚀 Live Demo
 
@@ -8,28 +8,49 @@ Visit the live demo: [https://THasthika.github.io/threejs-hello-world](https://T
 
 ## ✨ Features
 
+### Framework Architecture
+- **Modular Scene System**: Easy-to-extend BaseScene with lifecycle management
+- **Component-Based GameObjects**: Reusable 3D object components with transform controls
+- **Scene Manager**: Dynamic scene switching with transition support
+- **Input Management**: Centralized event handling with scene-specific controls
+- **Camera Controller**: Abstracted OrbitControls with utility methods
+
+### Interactive Features
+- **3D Scene**: Rotating cube with realistic lighting and shadows
+- **Camera Controls**: Click and drag to orbit, zoom, and pan around the scene
+- **Scene Input Handling**: Each scene manages its own input interactions
+- **Keyboard Controls**: Scene-specific keyboard shortcuts (C, W, R, Space)
+- **UI Controls**: Color customization, wireframe toggle, speed adjustment
+- **Auto Rotation**: Toggle automatic camera rotation around objects
+- **Responsive Design**: Works on desktop and mobile devices
+
+### Development Features
 - **TypeScript**: Full type safety and modern JavaScript features
 - **Webpack**: Modern bundling with hot reload and optimization
-- **Interactive 3D Cube**: A rotating cube with realistic lighting
-- **Camera Controls**: Click and drag to orbit, zoom, and pan around the scene
-- **Color Customization**: Click to randomly change the cube color
-- **Wireframe Toggle**: Switch between solid and wireframe rendering
-- **Auto Rotation**: Toggle automatic camera rotation around the cube
-- **Speed Control**: Adjust rotation speed with a slider
-- **Camera Reset**: Return to initial camera position
-- **Responsive Design**: Works on desktop and mobile devices
+- **Modular Architecture**: Easily extensible framework for complex 3D applications
+- **Scene Switching**: Built-in support for multiple scenes and transitions
+- **Component System**: Reusable GameObject components
 - **Automatic Deployment**: Uses GitHub Actions for CI/CD
 - **Code Splitting**: Optimized bundles for production
 
 ## 🛠️ Technologies Used
 
-- **TypeScript**: Type-safe JavaScript development
-- **Webpack 5**: Module bundling and development server
+### Core Framework
+- **TypeScript**: Type-safe JavaScript development with strict mode
 - **Three.js**: 3D graphics library with TypeScript definitions
-- **CSS3**: Modern styling with CSS modules support
-- **ESLint**: Code linting with TypeScript rules
-- **GitHub Actions**: Automated CI/CD pipeline
-- **GitHub Pages**: Free hosting platform
+- **Webpack 5**: Module bundling and development server with HMR
+
+### Architecture Components
+- **Modular Scene System**: BaseScene, SceneManager, GameObject classes
+- **Input Management**: Centralized InputManager with scene-specific handlers
+- **Camera Controls**: OrbitControls abstraction with utility methods
+- **Component System**: Reusable 3D object components
+
+### Development Tools
+- **ESLint**: Code linting with TypeScript rules and strict configuration
+- **CSS3**: Modern styling with component-based architecture
+- **GitHub Actions**: Automated CI/CD pipeline with type checking
+- **GitHub Pages**: Free hosting platform with automatic deployment
 
 ## 📁 Project Structure
 
@@ -37,9 +58,21 @@ Visit the live demo: [https://THasthika.github.io/threejs-hello-world](https://T
 threejs-hello-world/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # GitHub Actions workflow
+│       └── deploy.yml          # GitHub Actions CI/CD workflow
 ├── src/
-│   ├── main.ts                 # TypeScript application entry
+│   ├── core/                   # Framework core components
+│   │   ├── App.ts              # Main application orchestrator
+│   │   ├── BaseScene.ts        # Abstract scene base class
+│   │   ├── SceneManager.ts     # Scene lifecycle management
+│   │   ├── GameObject.ts       # Abstract 3D object base class
+│   │   ├── CameraController.ts # Camera controls abstraction
+│   │   └── InputManager.ts     # Centralized input handling
+│   ├── scenes/                 # Scene implementations
+│   │   └── HelloWorldScene.ts  # Demo scene with cube
+│   ├── objects/                # GameObject implementations
+│   │   └── Cube.ts            # Rotating cube component
+│   ├── main.ts                 # Application entry point
+│   ├── index.ts                # Framework exports for npm
 │   ├── styles.css              # Application styles
 │   └── index.html              # HTML template
 ├── dist/                       # Built output (generated)
@@ -99,51 +132,112 @@ threejs-hello-world/
 ## 🎮 Controls
 
 ### Camera Controls
-- **Mouse Drag**: Click and hold left mouse button to orbit around the cube
-- **Mouse Wheel**: Scroll to zoom in and out
+- **Mouse Drag**: Click and hold left mouse button to orbit around the scene
+- **Mouse Wheel**: Scroll to zoom in and out  
 - **Right Click + Drag**: Pan the camera around the scene
-- **Auto Rotate**: Toggle automatic camera rotation
-- **Reset Camera**: Return camera to initial position and orientation
+- **Auto Rotate Button**: Toggle automatic camera rotation
+- **Reset Camera Button**: Return camera to initial position and orientation
 
-### Cube Controls
-- **Change Color**: Randomly changes the cube color
-- **Toggle Wireframe**: Switches between solid and wireframe view
-- **Rotation Speed**: Slider to adjust cube rotation speed (0-0.05)
+### Scene-Specific Controls (HelloWorldScene)
 
-## ⚙️ Configuration
+#### UI Controls
+- **Change Color Button**: Randomly changes the cube color
+- **Toggle Wireframe Button**: Switches between solid and wireframe view
+- **Rotation Speed Slider**: Adjust cube rotation speed (0-0.05)
 
-### Customizing the Application
+#### Keyboard Controls
+- **C**: Randomize cube color
+- **W**: Toggle wireframe mode
+- **R**: Reset cube to center position
+- **Space**: Scale animation (cube grows then shrinks)
 
-Edit `src/main.ts` to customize:
+## ⚙️ Framework Architecture
 
-- **Cube properties**: Change geometry, materials, colors with full TypeScript support
-- **Camera settings**: Adjust field of view, position with type safety
-- **Lighting**: Modify ambient and directional lights
-- **Animation**: Alter rotation speed and direction
+### Core Components
 
-### Styling
+#### App Class (`src/core/App.ts`)
+- Main application orchestrator
+- Manages renderer, camera, and core Three.js setup
+- Integrates with SceneManager for scene lifecycle
+- Handles global input manager and window events
 
-Edit `src/styles.css` to customize:
+#### SceneManager (`src/core/SceneManager.ts`)
+- Manages scene lifecycle and switching
+- Supports scene transitions (instant, fade, slide)
+- Handles input manager delegation to active scenes
+- Provides scene registration and unregistration
 
-- **Colors and gradients**: Update the color scheme
-- **Layout**: Modify control panel position and appearance
-- **Responsive breakpoints**: Adjust mobile layout
+#### BaseScene (`src/core/BaseScene.ts`)
+- Abstract base class for all scenes
+- Provides GameObject management and lighting systems
+- Handles scene-specific input setup and cleanup
+- Includes dispose and resize event handling
 
-### Build Configuration
+#### GameObject (`src/core/GameObject.ts`)
+- Abstract base class for all 3D objects
+- Provides transform controls (position, rotation, scale)
+- Includes update lifecycle and disposal methods
+- Type-safe transform manipulation
 
-Edit `webpack.config.js` to modify:
+#### CameraController (`src/core/CameraController.ts`)
+- Abstracts OrbitControls with utility methods
+- Provides camera reset, auto-rotation, and constraint management
+- Handles window resize and camera configuration
+- Type-safe camera manipulation
 
-- **Bundle optimization**: Code splitting, minification
-- **Development server**: Port, hot reload settings
-- **Output paths**: Change build directory and file naming
+#### InputManager (`src/core/InputManager.ts`)
+- Centralized event handling system
+- Supports UI element binding and keyboard controls
+- Provides scene-specific input delegation
+- Handles cleanup and memory management
 
-### TypeScript Configuration
+### Creating New Scenes
 
-Edit `tsconfig.json` to adjust:
+```typescript
+// 1. Extend BaseScene
+class MyScene extends BaseScene {
+  protected init(): void {
+    // Initialize scene objects
+  }
 
-- **Compiler options**: Target ES version, strict mode settings
-- **Type checking**: Enable/disable specific TypeScript checks
-- **Module resolution**: Configure how modules are resolved
+  public update(deltaTime: number): void {
+    // Update scene logic
+  }
+
+  protected override setupInputHandlers(): void {
+    if (!this.inputManager) return;
+    
+    // Setup scene-specific input handlers
+    this.inputManager.setupButton('myButton', () => {
+      // Handle button click
+    });
+  }
+}
+
+// 2. Register with SceneManager
+sceneManager.registerScene('myScene', new MyScene());
+await sceneManager.switchToScene('myScene');
+```
+
+### Creating New GameObjects
+
+```typescript
+// 1. Extend GameObject
+class MyObject extends GameObject {
+  constructor(options: MyObjectOptions) {
+    super();
+    // Initialize geometry and materials
+  }
+
+  public update(deltaTime: number): void {
+    // Update object logic
+    super.update(deltaTime);
+  }
+}
+
+// 2. Add to scene
+scene.addGameObject('myObject', new MyObject(options));
+```
 
 ## 🚀 Deployment
 
@@ -214,42 +308,109 @@ npm run clean
 
 4. **Commit and push** to trigger automatic deployment
 
+### Framework Development
+
+#### Adding a New Scene
+
+1. Create a new scene class in `src/scenes/`:
+   ```typescript
+   import { BaseScene, SceneOptions } from '../core/BaseScene';
+   
+   export class MyScene extends BaseScene {
+     protected init(): void {
+       // Scene initialization
+     }
+     
+     public update(deltaTime: number): void {
+       // Scene update logic
+     }
+     
+     protected override setupInputHandlers(): void {
+       // Scene-specific input handling
+     }
+   }
+   ```
+
+2. Register the scene in `src/main.ts`:
+   ```typescript
+   const myScene = new MyScene(options);
+   sceneManager.registerScene('myScene', myScene);
+   ```
+
+3. Switch to the scene:
+   ```typescript
+   await sceneManager.switchToScene('myScene');
+   ```
+
+#### Adding a New GameObject
+
+1. Create a new object class in `src/objects/`:
+   ```typescript
+   import { GameObject } from '../core/GameObject';
+   
+   export class MyObject extends GameObject {
+     constructor(options: MyObjectOptions) {
+       super();
+       // Initialize Three.js geometry and materials
+     }
+     
+     public update(deltaTime: number): void {
+       // Update logic
+       super.update(deltaTime);
+     }
+   }
+   ```
+
+2. Use in a scene:
+   ```typescript
+   const myObject = new MyObject(options);
+   this.addGameObject('myObject', myObject);
+   ```
+
 ### Code Structure
 
-#### `src/main.ts`
-Contains the main Three.js application class with methods for:
-- Scene initialization with TypeScript interfaces
-- Rendering loop with proper typing
-- Event handling with type-safe DOM manipulation
-- Resource cleanup and memory management
+#### Core Framework Files
 
-#### `src/styles.css`
-Responsive styles including:
-- Modern glassmorphism design
-- Mobile-friendly layout
-- Smooth animations and transitions
+- **`App.ts`**: Main application orchestrator, handles Three.js setup
+- **`SceneManager.ts`**: Scene lifecycle management and transitions
+- **`BaseScene.ts`**: Abstract scene with GameObject and input management
+- **`GameObject.ts`**: Abstract 3D object with transform and lifecycle
+- **`CameraController.ts`**: Camera controls with utility methods
+- **`InputManager.ts`**: Centralized input handling and event management
 
-#### `src/index.html`
-HTML template processed by Webpack with:
-- Dynamic title injection
-- Automatic script and style inclusion
-- Semantic HTML5 structure
+#### Implementation Files
 
-#### `webpack.config.js`
-Webpack configuration with:
-- TypeScript compilation via ts-loader
-- CSS processing and extraction
-- Development server with hot reload
-- Production optimization and code splitting
+- **`HelloWorldScene.ts`**: Demo scene showcasing framework capabilities
+- **`Cube.ts`**: Example GameObject with rotation and material controls
+- **`main.ts`**: Application initialization and scene setup
 
-## 🌟 Enhancement Ideas
+## 🌟 Framework Enhancement Ideas
 
-- **Additional Shapes**: Add spheres, cylinders, custom geometries
-- **Particle Systems**: Create animated particle effects
-- **Post-processing**: Add bloom, depth of field effects
-- **Audio Integration**: Sync animations with audio
-- **VR Support**: Add WebXR for virtual reality
-- **Physics**: Integrate physics engine for realistic motion
+### Scene System Extensions
+- **Scene Transitions**: Implement fade, slide, and custom transition effects
+- **Scene Persistence**: Save and restore scene state across transitions
+- **Scene Preloading**: Background loading of scenes for smooth transitions
+- **Scene Hierarchy**: Parent-child scene relationships and inheritance
+
+### GameObject System Extensions
+- **Component Architecture**: Add modular components (Transform, Renderer, Collider)
+- **Asset Management**: Centralized loading and caching of 3D models and textures
+- **Animation System**: Timeline-based animations and state machines
+- **Physics Integration**: Add physics engine integration for realistic motion
+
+### Advanced Features
+- **Post-processing Pipeline**: Bloom, depth of field, screen-space effects
+- **Particle Systems**: GPU-accelerated particle effects and simulations
+- **Audio Integration**: 3D spatial audio with scene synchronization
+- **VR/AR Support**: WebXR integration for immersive experiences
+- **Multi-scene Rendering**: Split-screen and picture-in-picture rendering
+- **Performance Monitoring**: Built-in profiling and optimization tools
+
+### Development Tools
+- **Scene Editor**: Visual scene composition and editing tools
+- **Inspector Panel**: Runtime debugging and property editing
+- **Asset Pipeline**: Automated asset optimization and conversion
+- **Hot Reload**: Live scene and asset reloading during development
 
 ## 🐛 Troubleshooting
 
@@ -269,9 +430,41 @@ Webpack configuration with:
 
 ### Browser Compatibility
 
-- **Modern browsers**: Chrome 60+, Firefox 55+, Safari 12+
-- **WebGL required**: Most devices since 2015
-- **Mobile support**: iOS 12+, Android 7+
+- **Modern browsers**: Chrome 90+, Firefox 88+, Safari 14+
+- **WebGL 2.0 required**: Most devices since 2017
+- **Mobile support**: iOS 14+, Android 9+
+- **TypeScript support**: Built with TypeScript 5.2+
+
+## 📚 API Documentation
+
+### Global Access
+
+The framework provides global debugging access:
+
+```javascript
+// Access the main app instance
+window.threeApp.getStats();
+window.threeApp.switchToScene('sceneName');
+
+// Access the scene manager
+window.sceneManager.getCurrentScene();
+window.sceneManager.getRegisteredScenes();
+```
+
+### Framework Exports
+
+The framework can be used as an npm package:
+
+```typescript
+import { 
+  App, 
+  SceneManager, 
+  BaseScene, 
+  GameObject,
+  CameraController,
+  InputManager 
+} from 'threejs-hello-world';
+```
 
 ## 📄 License
 
@@ -293,10 +486,12 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- [Three.js](https://threejs.org/) - Amazing 3D library
-- [GitHub Pages](https://pages.github.com/) - Free hosting
-- [GitHub Actions](https://github.com/features/actions) - CI/CD platform
+- [Three.js](https://threejs.org/) - Amazing 3D graphics library
+- [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript development
+- [Webpack](https://webpack.js.org/) - Modern module bundling
+- [GitHub Pages](https://pages.github.com/) - Free hosting platform
+- [GitHub Actions](https://github.com/features/actions) - CI/CD automation
 
 ---
 
-Made with ❤️ and JavaScript
+🚀 **Ready to build amazing 3D applications with this modular framework!**
