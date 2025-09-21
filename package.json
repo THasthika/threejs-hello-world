@@ -26,12 +26,12 @@
     "github-pages",
     "hello-world"
   ],
-  "author": "Your Name",
+  "author": "Tharindu Hasthika",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/threejs-hello-world/issues"
+    "url": "https://github.com/THasthika/threejs-hello-world/issues"
   },
-  "homepage": "https://yourusername.github.io/threejs-hello-world",
+  "homepage": "https://THasthika.github.io/threejs-hello-world",
   "devDependencies": {
     "@types/three": "^0.180.0",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
