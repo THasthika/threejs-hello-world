@@ -1,21 +1,20 @@
 import * as THREE from 'three';
 import { CameraController } from '../core/CameraController';
 import { InputManager } from '../core/InputManager';
-import { HelloWorldScene } from '../scenes/HelloWorldScene';
+import { SceneManager } from '../core/SceneManager';
+import { BaseScene } from '../core/BaseScene';
 
 export interface AppOptions {
   container: HTMLElement;
+  sceneManager: SceneManager;
   backgroundColor?: number;
-  cubeColor?: number;
-  cubeSize?: number;
-  rotationSpeed?: number;
   enableOrbitControls?: boolean;
   autoRotate?: boolean;
 }
 
 export class App {
   // Core Three.js components
-  private scene!: HelloWorldScene;
+  private sceneManager!: SceneManager;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private cameraController!: CameraController;
@@ -34,7 +33,7 @@ export class App {
     // Initialize Three.js components
     this.initializeRenderer();
     this.initializeCamera();
-    this.initializeScene(options);
+    this.initializeSceneManager(options);
     this.initializeCameraController(options);
     this.initializeInputManager();
 
@@ -70,13 +69,8 @@ export class App {
     this.camera.position.set(0, 0, 5);
   }
 
-  private initializeScene(options: AppOptions): void {
-    this.scene = new HelloWorldScene({
-      backgroundColor: options.backgroundColor ?? 0x222222,
-      cubeColor: options.cubeColor ?? 0x00ff00,
-      cubeSize: options.cubeSize ?? 1,
-      rotationSpeed: options.rotationSpeed ?? 0.01
-    });
+  private initializeSceneManager(options: AppOptions): void {
+    this.sceneManager = options.sceneManager;
 
     // Set renderer clear color to match scene
     this.renderer.setClearColor(options.backgroundColor ?? 0x222222);
@@ -101,6 +95,11 @@ export class App {
       preventContextMenu: true
     });
 
+    this.inputManager.setupKeyboardHandling();
+
+    // Pass input manager to scene manager
+    this.sceneManager.setInputManager(this.inputManager);
+
     // Setup window resize handling
     this.inputManager.onResize(() => this.handleResize());
     
@@ -109,16 +108,6 @@ export class App {
   }
 
   private setupEventHandlers(): void {
-    // Color change button
-    this.inputManager.setupButton('colorBtn', () => {
-      this.scene.changeCubeColor();
-    });
-
-    // Wireframe toggle button
-    this.inputManager.setupButton('wireframeBtn', () => {
-      this.scene.toggleCubeWireframe();
-    });
-
     // Auto rotate toggle button
     this.inputManager.setupButton('autoRotateBtn', () => {
       this.cameraController.toggleAutoRotate();
@@ -129,11 +118,9 @@ export class App {
       this.cameraController.reset();
     });
 
-    // Speed slider
+    // Speed slider - this will need to be handled by the scene or externally
     this.inputManager.setupSlider('speedRange', (value: number) => {
-      this.scene.setCubeRotationSpeed(value);
-      
-      // Also update auto-rotate speed if enabled
+      // Auto-rotate speed adjustment
       if (this.cameraController.isAutoRotateEnabled()) {
         this.cameraController.setAutoRotateSpeed(value * 100);
       }
@@ -151,8 +138,11 @@ export class App {
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Notify scene of resize
-    this.scene.onResize(width, height);
+    // Notify current scene of resize
+    const currentScene = this.sceneManager.getCurrentScene();
+    if (currentScene && typeof (currentScene as any).onResize === 'function') {
+      (currentScene as any).onResize(width, height);
+    }
   }
 
   private animate(): void {
@@ -166,11 +156,14 @@ export class App {
     // Update camera controls
     this.cameraController.update();
 
-    // Update scene
-    this.scene.update(deltaTime);
+    // Update scene manager
+    this.sceneManager.update(deltaTime);
 
-    // Render
-    this.renderer.render(this.scene.getScene(), this.camera);
+    // Render current scene
+    const currentScene = this.sceneManager.getCurrentScene();
+    if (currentScene) {
+      this.renderer.render(currentScene.getScene(), this.camera);
+    }
   }
 
   // Public API methods
@@ -201,13 +194,25 @@ export class App {
     this.start();
   }
 
-  // Scene control methods
-  public getScene(): HelloWorldScene {
-    return this.scene;
+  // Scene management methods
+  public getSceneManager(): SceneManager {
+    return this.sceneManager;
+  }
+
+  public getCurrentScene(): BaseScene | null {
+    return this.sceneManager.getCurrentScene();
+  }
+
+  public switchToScene(sceneId: string): Promise<void> {
+    return this.sceneManager.switchToScene(sceneId);
   }
 
   public getCameraController(): CameraController {
     return this.cameraController;
+  }
+
+  public getInputManager(): InputManager {
+    return this.inputManager;
   }
 
   public getRenderer(): THREE.WebGLRenderer {
@@ -218,19 +223,7 @@ export class App {
     return this.camera;
   }
 
-  // Advanced control methods
-  public setCubeColor(color: number): void {
-    this.scene.setCubeColor(color);
-  }
-
-  public setCubeWireframe(wireframe: boolean): void {
-    this.scene.setCubeWireframe(wireframe);
-  }
-
-  public setCubeRotationSpeed(speed: number): void {
-    this.scene.setCubeRotationSpeed(speed);
-  }
-
+  // Camera control methods
   public enableCameraControls(enabled: boolean): void {
     this.cameraController.enableControls(enabled);
   }
@@ -248,8 +241,8 @@ export class App {
     return {
       isRunning: this.isRunning,
       frameRate: 1 / this.clock.getDelta(),
-      cubeColor: this.scene.getCubeColor(),
-      cubeRotationSpeed: this.scene.getCubeRotationSpeed(),
+      currentScene: this.sceneManager.getCurrentScene()?.constructor.name || 'None',
+      registeredScenes: this.sceneManager.getRegisteredScenes(),
       cameraPosition: this.cameraController.getCameraPosition(),
       autoRotateEnabled: this.cameraController.isAutoRotateEnabled()
     };
@@ -268,9 +261,9 @@ export class App {
       this.cameraController.dispose();
     }
 
-    // Dispose scene
-    if (this.scene) {
-      this.scene.dispose();
+    // Dispose scene manager
+    if (this.sceneManager) {
+      this.sceneManager.dispose();
     }
 
     // Dispose renderer

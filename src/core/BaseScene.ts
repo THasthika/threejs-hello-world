@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { InputManager } from './InputManager';
 
 export interface SceneOptions {
   backgroundColor?: number;
@@ -13,6 +14,7 @@ export abstract class BaseScene {
   protected gameObjects: Map<string, any> = new Map();
   protected lights: THREE.Light[] = [];
   protected options: Required<SceneOptions>;
+  protected inputManager: InputManager | null = null;
 
   constructor(options: SceneOptions = {}) {
     this.scene = new THREE.Scene();
@@ -47,6 +49,27 @@ export abstract class BaseScene {
   // Abstract methods that must be implemented by child classes
   protected abstract init(): void;
   public abstract update(deltaTime: number): void;
+
+  // Input handling methods - can be overridden by child classes
+  protected setupInputHandlers(): void {
+    // Override in child classes to setup scene-specific input handlers
+  }
+
+  protected cleanupInputHandlers(): void {
+    // Override in child classes to cleanup scene-specific input handlers
+  }
+
+  // Called by SceneManager when scene becomes active
+  public setInputManager(inputManager: InputManager): void {
+    this.inputManager = inputManager;
+    this.setupInputHandlers();
+  }
+
+  // Called by SceneManager when scene becomes inactive
+  public clearInputManager(): void {
+    this.cleanupInputHandlers();
+    this.inputManager = null;
+  }
 
   // GameObject management
   public addGameObject(id: string, gameObject: any): void {
@@ -102,6 +125,9 @@ export abstract class BaseScene {
   }
 
   public dispose(): void {
+    // Cleanup input handlers
+    this.clearInputManager();
+
     // Dispose all game objects
     this.gameObjects.forEach((gameObject) => {
       if (gameObject.dispose) {

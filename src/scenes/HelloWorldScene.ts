@@ -48,6 +48,50 @@ export class HelloWorldScene extends BaseScene {
     // Additional scene initialization if needed
   }
 
+  protected override setupInputHandlers(): void {
+    if (!this.inputManager) return;
+
+    // Color change button
+    this.inputManager.setupButton('colorBtn', () => {
+      this.changeCubeColor();
+    });
+
+    // Wireframe toggle button
+    this.inputManager.setupButton('wireframeBtn', () => {
+      this.toggleCubeWireframe();
+    });
+
+    // Speed slider
+    this.inputManager.setupSlider('speedRange', (value: number) => {
+      this.setCubeRotationSpeed(value);
+    });
+
+    // Optional: Add keyboard controls
+    this.inputManager.onKeyDown((event: KeyboardEvent) => {
+      switch (event.code) {
+        case 'KeyC':
+          this.changeCubeColor();
+          break;
+        case 'KeyW':
+          this.toggleCubeWireframe();
+          break;
+        case 'KeyR':
+          this.resetCube();
+          break;
+        case 'Space':
+          event.preventDefault();
+          this.animateCubeScale(2, 500);
+          setTimeout(() => this.animateCubeScale(1, 500), 500);
+          break;
+      }
+    });
+  }
+
+  protected override cleanupInputHandlers(): void {
+    // Remove event listeners if needed
+    // InputManager handles most cleanup automatically
+  }
+
   public update(deltaTime: number): void {
     // Update all game objects
     this.gameObjects.forEach((gameObject) => {
